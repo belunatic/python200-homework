@@ -158,3 +158,127 @@ print(new_batch.highest())
 # '''
 
 ''' Python refuse the stations:list[Station]=[] because; A default value is created once when the class is defined, so every instance would share the same list. Appending to one batch would append to all of them. Dataclasses detect this problem and refuse to define the class.'''
+
+#---Pydantic
+
+#Q1
+
+from pydantic import BaseModel, Field, ValidationError,model_validator
+
+class Reading(BaseModel):
+    '''
+    A reading from one of the station 
+
+    station_id: the station the record is coming from
+    timestamp: the exact time the reading was taken
+    temperature_c: the temp at that moment that was taken
+    humidity: the value of humidity
+
+    '''
+
+    station_id:str=Field(min_length=3)
+    timestamp:str
+    temperature_c:float = Field(ge= -90, le=60)
+    humidity:float = Field(ge= 0, le=100)
+
+    @model_validator(mode='after')
+    def check_humid_temp(self):
+        ''' Reject humid equal to 0.0' and temperature under -40'''
+        if self.humidity == 0.0 and self.temperature_c < -40:
+            raise ValueError(
+                f'Humidity cannot be {self.humidity} and the temperature, {self.temperature_c} is below -40 '
+            )
+        return self
+
+
+
+reading_1 = Reading(
+    station_id = '1234',
+    timestamp = '1791174083',
+    temperature_c= 21,
+    humidity= 99
+    )
+
+print(reading_1)
+
+#Q2
+
+try:
+    Reading(
+    station_id = '1234',
+    temperature_c= 21,
+    humidity= 99
+    )
+except ValidationError as e:
+    print(e)
+
+try:
+    Reading(
+    station_id = '1234',
+    timestamp = '1791174083',
+    temperature_c= 150.0,
+    humidity= 99
+    )
+except ValidationError as e:
+    print(e)
+
+try:
+    Reading(
+    station_id = '1234',
+    timestamp = '1791174083',
+    temperature_c= 21,
+    humidity= "very humid"
+    )
+except ValidationError as e:
+    print(e)
+
+reading_2 = Reading(
+    station_id = '1234',
+    timestamp = '1791174083',
+    temperature_c= "21.5",
+    humidity= 40
+    )
+
+print(reading_2,type(reading_2.temperature_c),type(reading_2.humidity))
+
+'''
+why does Pydantic accept "21.5" but reject "very humid"? State the rule in your own words.
+
+- it does accept it because python is capable to interpret a value if it is has one meaning or outcome, therefore 21.5 has one outcome while "very humid" will have multiple outcome.
+
+'''
+
+# Q4
+
+try:
+    Reading(
+        station_id = '34',
+        temperature_c= "very hot",
+        humidity= 40
+    )
+except ValidationError as e:
+    print(f"{e.error_count()} problems found\n")
+    for err in e.errors():
+        print(f"  field={err['loc']}  msg={err['msg']}")
+
+'''
+how many errors were reported, and why is reporting all of them at once more useful than stopping at the first?
+- 3 error reported
+- It is useful because when working with a malformed API payload, you will receive a whole list at once allowing you to fix all of them at once or less interactions on fixing it.
+
+'''
+
+try:
+    Reading(
+        station_id= '12345',
+        timestamp='123456787',
+        temperature_c = -54,
+        humidity =0.0
+    )
+except ValidationError as e:
+    print(e)
+
+''' 
+explaining why this rule cannot be expressed with Field constraints alone.
+- you can only set one constrain per attribute, so if additonal constrain are needed then model_validation is useful for that
+'''

@@ -282,3 +282,100 @@ except ValidationError as e:
 explaining why this rule cannot be expressed with Field constraints alone.
 - you can only set one constrain per attribute, so if additonal constrain are needed then model_validation is useful for that
 '''
+
+#----- pytest ----
+
+import pytest
+
+#Q1
+
+def celsius_to_fahrenheit(celsius: float) -> float:
+    ''' convert celsius temperature to fahrenheit'''
+    return celsius * 9 / 5 + 32
+
+def test_celsius_to_fahrenheit():
+    '''testing the conversions'''
+    assert celsius_to_fahrenheit(0) == 32
+    assert celsius_to_fahrenheit(100) == 212
+    assert celsius_to_fahrenheit(37) == pytest.approx(98.6)
+
+'''pytest.approx is necessary a regular result of float is result to a fraction with aloot of decimal places which will lead to the test failing. Therefore pytest.approx compare float within the relative tolerance'''
+
+#Q2
+
+def mean(values: list[float]) -> float:
+    ''' Check to for an empty string
+    
+    Raises:
+            ValueError: if values list is empty
+    '''
+    if len(values) == 0:
+        raise ValueError(
+            f"cannot average an empty list"
+        )
+    else:
+        return sum(values)/ len(values)
+
+def test_mean_of_empty_raises():
+    ''' check for empty list of values  '''
+    with pytest.raises(ValueError, match='empty'):
+        mean([])
+
+''' 
+what would pytest.raises(ValueError) alone fail to catch that match= catches?
+- because the "match" variable is used as a search string in assert the exception's error message  matches a specific regular expression
+'''
+
+#Q3
+
+@pytest.mark.parametrize(
+    "values, expected, reason",
+    [ 
+        ([1,2,3], 2 , "positive number"),
+        ([-1,-2,-3], -2 , "negative number"),
+        ([4], 4 , "single element"),
+        ([1,2,3,10], 4 , "positive number")
+     ]
+)
+def test_mean_values(values,expected, reason):
+    assert mean(values) == expected , reason
+
+'''
+why is one parametrized test with four cases better than four nearly identical test functions?
+- Organization and legibility and also if one test fail it does not stop it will assert all tests
+'''
+
+#Q4
+
+"""
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Abel Xul\Data Science Class\python200-homework\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Abel Xul\Data Science Class\python200-homework\assignments_01
+collected 6 items                                                                                                                                                                                                                     
+
+warmup_01.py::test_celsius_to_fahrenheit FAILED                                                                                                                                                                                 [ 16%]
+warmup_01.py::test_mean_of_empty_raises PASSED                                                                                                                                                                                  [ 33%]
+warmup_01.py::test_mean_values[values0-2-positive number] PASSED                                                                                                                                                                [ 50%]
+warmup_01.py::test_mean_values[values1--2-negative number] PASSED                                                                                                                                                               [ 66%]
+warmup_01.py::test_mean_values[values2-4-single element] PASSED                                                                                                                                                                 [ 83%]
+warmup_01.py::test_mean_values[values3-4-positive number] PASSED                                                                                                                                                                [100%]
+
+============================================================================================================== FAILURES ==============================================================================================================
+_____________________________________________________________________________________________________ test_celsius_to_fahrenheit _____________________________________________________________________________________________________
+
+    def test_celsius_to_fahrenheit():
+        '''testing the conversions'''
+        assert celsius_to_fahrenheit(0) == 32
+>       assert celsius_to_fahrenheit(100) == 212
+E       assert 257.0 == 212
+E        +  where 257.0 = celsius_to_fahrenheit(100)
+
+warmup_01.py:299: AssertionError
+====================================================================================================== short test summary info =======================================================================================================
+FAILED warmup_01.py::test_celsius_to_fahrenheit - assert 257.0 == 212
+"""
+
+'''
+ what specific values did pytest show you in the failure report, and why is that more useful than a bare "assertion failed"?
+ - it showed me that "assert celsius_to_fahrenheit(100) == 212" has failed, this is great because it shows exactly what failed and where to go correct it.
+'''

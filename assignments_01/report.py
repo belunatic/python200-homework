@@ -22,3 +22,4 @@ hourly_list = to_readings(parsed)
 
 ds = DailyAggregator()
 print(ds.summarize(hourly_list))
+print(ds.incomplete_days(hourly_list))

@@ -50,8 +50,6 @@ class DailyAggregator :
             date= reading.timestamp[:10]
             daily.setdefault(date,[]).append(reading)
 
-        print('this is daily:')
-        print(daily)
 
         #loop thought the dates
         for date, observations in daily.items():
@@ -76,4 +74,32 @@ class DailyAggregator :
         )
 
         return dailySummary
+
+    def incomplete_days(self,readings: list[HourlyReading]) -> list[str]:
+        ''' Group readings by calendar date and return the summaries sorted by date
+        
+            Args:
+                readings: List of hourly weather readings to be summarized.
+
+            Returns:
+                List of all the date that did not have minimum observation of 24.
+        '''
+        #list of incomplete dates
+        incomplete_days =[]
+        
+        #daily aggregation dictionary
+        daily={}
+
+        #get readings and group them by dates
+        for reading in readings:
+            date= reading.timestamp[:10]
+            daily.setdefault(date,[]).append(reading)
+
+        #add the incomplete dates into a list
+        for date, observations in daily.items():
+            if len(observations) < 24:
+                incomplete_days.append(date)
+
+        return incomplete_days
+        
 

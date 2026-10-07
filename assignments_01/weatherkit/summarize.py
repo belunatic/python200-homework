@@ -76,7 +76,7 @@ class DailyAggregator :
         return dailySummary
 
     def incomplete_days(self,readings: list[HourlyReading]) -> list[str]:
-        ''' Group readings by calendar date and return the summaries sorted by date
+        ''' SUmmary of day that had less than 24 hours of observation'
         
             Args:
                 readings: List of hourly weather readings to be summarized.

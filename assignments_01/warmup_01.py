@@ -347,33 +347,33 @@ why is one parametrized test with four cases better than four nearly identical t
 
 #Q4
 
-"""
-platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Abel Xul\Data Science Class\python200-homework\.venv\Scripts\python.exe
-cachedir: .pytest_cache
-rootdir: C:\Abel Xul\Data Science Class\python200-homework\assignments_01
-collected 6 items                                                                                                                                                                                                                     
+# """
+# platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Abel Xul\Data Science Class\python200-homework\.venv\Scripts\python.exe
+# cachedir: .pytest_cache
+# rootdir: C:\Abel Xul\Data Science Class\python200-homework\assignments_01
+# collected 6 items                                                                                                                                                                                                                     
 
-warmup_01.py::test_celsius_to_fahrenheit FAILED                                                                                                                                                                                 [ 16%]
-warmup_01.py::test_mean_of_empty_raises PASSED                                                                                                                                                                                  [ 33%]
-warmup_01.py::test_mean_values[values0-2-positive number] PASSED                                                                                                                                                                [ 50%]
-warmup_01.py::test_mean_values[values1--2-negative number] PASSED                                                                                                                                                               [ 66%]
-warmup_01.py::test_mean_values[values2-4-single element] PASSED                                                                                                                                                                 [ 83%]
-warmup_01.py::test_mean_values[values3-4-positive number] PASSED                                                                                                                                                                [100%]
+# warmup_01.py::test_celsius_to_fahrenheit FAILED                                                                                                                                                                                 [ 16%]
+# warmup_01.py::test_mean_of_empty_raises PASSED                                                                                                                                                                                  [ 33%]
+# warmup_01.py::test_mean_values[values0-2-positive number] PASSED                                                                                                                                                                [ 50%]
+# warmup_01.py::test_mean_values[values1--2-negative number] PASSED                                                                                                                                                               [ 66%]
+# warmup_01.py::test_mean_values[values2-4-single element] PASSED                                                                                                                                                                 [ 83%]
+# warmup_01.py::test_mean_values[values3-4-positive number] PASSED                                                                                                                                                                [100%]
 
-============================================================================================================== FAILURES ==============================================================================================================
-_____________________________________________________________________________________________________ test_celsius_to_fahrenheit _____________________________________________________________________________________________________
+# ============================================================================================================== FAILURES ==============================================================================================================
+# _____________________________________________________________________________________________________ test_celsius_to_fahrenheit _____________________________________________________________________________________________________
 
-    def test_celsius_to_fahrenheit():
-        '''testing the conversions'''
-        assert celsius_to_fahrenheit(0) == 32
->       assert celsius_to_fahrenheit(100) == 212
-E       assert 257.0 == 212
-E        +  where 257.0 = celsius_to_fahrenheit(100)
+#     def test_celsius_to_fahrenheit():
+#         '''testing the conversions'''
+#         assert celsius_to_fahrenheit(0) == 32
+# >       assert celsius_to_fahrenheit(100) == 212
+# E       assert 257.0 == 212
+# E        +  where 257.0 = celsius_to_fahrenheit(100)
 
-warmup_01.py:299: AssertionError
-====================================================================================================== short test summary info =======================================================================================================
-FAILED warmup_01.py::test_celsius_to_fahrenheit - assert 257.0 == 212
-"""
+# warmup_01.py:299: AssertionError
+# ====================================================================================================== short test summary info =======================================================================================================
+# FAILED warmup_01.py::test_celsius_to_fahrenheit - assert 257.0 == 212
+# """
 
 '''
  what specific values did pytest show you in the failure report, and why is that more useful than a bare "assertion failed"?

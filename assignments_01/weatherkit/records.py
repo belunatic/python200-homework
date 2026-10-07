@@ -1,9 +1,9 @@
-from dataclasses import dataclass
+from dataclasses import dataclass   
 from weatherkit import WeatherResponse
 
 @dataclass
 class HourlyReading:
-    ''' hourly readin for a fix location
+    ''' hourly reading for a fix location
     
     Attribute:
         timestamp: observation date and time as an ISO string
@@ -15,7 +15,8 @@ class HourlyReading:
     temperature_c: float
     precipitation_mm: float
 
-    def to_readings(response: WeatherResponse) -> list[HourlyReading]:
+
+def to_readings(response: WeatherResponse) -> list[HourlyReading]:
         '''
         Reading the WeatherResponse and returning the hourly value as a list
 
@@ -40,3 +41,4 @@ class HourlyReading:
     - HourlyReading is a dataclass because the data stored does not require the validation, parsing, and serialization features provided by Pydantic models. WeatherResponse, on the other hand, represents the raw API response and benefits from Pydantic's validation to ensure the data conforms to the expected schema.
 -
 '''
+

@@ -97,7 +97,7 @@ class DailyAggregator :
 
         #add the incomplete dates into a list
         for date, observations in daily.items():
-            if len(observations) < 24:
+            if len(observations) < self.min_hours:
                 incomplete_days.append(date)
 
         return incomplete_days

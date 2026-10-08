@@ -43,3 +43,13 @@ if __name__ =="__main__":
 '''
 If someone omit the guard, it means that whenever the repory.py is imported it will immediately execute the report.py (fetching data, printing and so on); This si not good if you are to import report.py in test folder/ file, it may populate your test variables and cause wrong tests.
 '''
+
+'''
+Your WeatherResponse rejects the whole file if a single temperature is null. Is that the right behavior for a weather pipeline? Describe one situation where you would want it, and one where you would rather tolerate the gap. What would you change in the schema to tolerate it?
+- In the world of accuracy a null data may lead to inaccuracy, so it is important to have actual data and no missing data. A situation I think it will be okey to allow a single temperature null data is when the data is very close from one to another or consistency, it will make it easy to calculate or fill the gap. In the schema , I would just temperature_2m to be float | None.
+DailyAggregator.min_hours defaults to 24. What goes wrong if a pipeline runs at noon and the day is only half over? How does incomplete_days() help?
+- If the pipeline runs at noon then that date will be added to the incomplete_days return list. The function incomplete_days return a list of date that we can use as information to proper locate or learn the problem by giving us a dates to identify the errors or issue. 
+You wrote weatherkit as a package rather than one file. Name one concrete thing that becomes easier in Week 10, when a pipeline needs to import this code.
+- Cohesion, the degree to which the methods, properties, and responsibilities inside a class belong together and serve a single, well-defined purpose.
+
+'''

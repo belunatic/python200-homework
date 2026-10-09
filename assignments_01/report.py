@@ -28,10 +28,10 @@ def main():
     #print daily summary
 
     # Print header row (with 12-character spaces for alignment)
-    print(f"{'Date':<12} {'temp_max':<10} {'temp_min':<10} {'temp_range':<10}")
+    print(f"{'Date':<12} {'temp_max':<10} {'temp_min':<10} {'precipitation_sum':<20} {'temp_range':<10}")
 
     for i in daily_summary_rows:
-        print(f"{i.date:<12} {i.temp_max: <10.2f} {i.temp_min: <10.2f} {i.temp_range(): < 10.2f}")
+        print(f"{i.date:<12} {i.temp_max: <10.2f} {i.temp_min: <10.2f} {i.precipitation_sum: <20.2f} {i.temp_range(): < 10.2f}")
 
     #print out incomplete days list
     if(incomplete_data_row):

@@ -90,12 +90,12 @@ none_temp_element = {
   "hourly": {
     "time": [
       "2026-04-08T00:00",
-      None,
+      "2026-04-08T00:00",
       "2026-04-08T02:00"
     ],
     "temperature_2m": [
       16.8,
-      15.1,
+      None,
       13.4
     ],
     "precipitation": [
@@ -110,7 +110,8 @@ none_temp_element = {
 
 #test the schemas validation
 def test_the_schemas_json_validation():
-    assert WeatherResponse.model_validate(api_response)
+    parsed = WeatherResponse.model_validate(api_response)
+    assert isinstance(parsed, WeatherResponse) and len(parsed.hourly.time) == 168
 
 #invalid latitude validation
 def test_latitude_error():

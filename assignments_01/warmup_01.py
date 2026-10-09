@@ -3,17 +3,18 @@
 #Q1
 
 class Thermometer:
-    def __init__(self, location, readings=[]):
+    def __init__(self, location, readings=None):
         '''
         location: the place the readings where taken
         readings: the daily temp readings
         '''
         self.location = location
-        self.readings = readings
+        self.readings = readings if readings else []
+        
 
     def add(self,reading):
         '''append a reading to the reading list'''
-        self.reading.append(reading)
+        self.readings.append(reading)
 
     def average(self):
         '''average daily reading'''
@@ -125,7 +126,7 @@ class StationBatch:
 
     def add(self,station:Station) -> None:
         ''' add a station to the station batch'''
-        self.station.append(station)
+        self.stations.append(station)
 
     def highest(self)-> Station | None:
         ''' find the ihghest elevated station from the batch'''

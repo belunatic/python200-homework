@@ -24,7 +24,7 @@ class Thermometer:
 
     def hottest(self):
         '''highest reading'''
-        return max(self.readings)
+        return max(self.readings) if self.readings else None
 
     def __repr__(self):
         return f"Thermometer(location={self.location}, n_readings={len(self.readings)}, average={self.average()})"

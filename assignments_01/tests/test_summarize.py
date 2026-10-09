@@ -133,3 +133,8 @@ def test_different_daily_aggregation(daily_agg, expected, reason,less_day_observ
     daily_summary = DailyAggregator(daily_agg)
     results = daily_summary.summarize(less_day_observation)
     assert (len(results) > 0) == expected,reason
+
+'''
+I broke the incomplete_days method and changed the the greater than to lesser than; the test_incomplete_days and test_min_hours_lowered failed the test.
+
+'''

@@ -129,3 +129,45 @@ print('R2: ', r2)
 '''
 RMSE is 4.18, which means that the model_train prediction are off by 4.18 degrees on average.
 '''
+
+#Task 5
+feature_cols = ["temperature_2m_min", "precipitation_sum",
+                "wind_speed_10m_max", "is_summer"]
+X = df[feature_cols].values
+y = df["temperature_2m_max"].values
+
+#train and test the model
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+#model
+model_multi = LinearRegression()
+model_multi.fit(X_train, y_train)
+
+#r2
+train_score = model_multi.score(X_train, y_train)
+test_score = model_multi.score(X_test, y_test)
+print('\n--------\n')
+print('Train R2: ', train_score)
+print('\n--------\n')
+print('Test R2: ', test_score)
+
+#rmse on the test set
+y_pred_test = model_multi.predict(X_test)
+rmse = np.sqrt(mean_squared_error(y_test, y_pred_test))
+print('\n--------\n')
+print('Test RMSE: ', rmse)
+
+'''
+By adding more feature the RMSE is now 3.82, which means that the model_multi prediction are off by 3.82 degrees on average.
+'''
+
+for name, coef in zip(feature_cols, model_multi.coef_):
+    print(f"{name:22s}: {coef:+.3f}") 
+
+'''
+Which features raise the predicted high, and which lower it? Are any signs surprising? Then compare train R² to test R². Are they close, or is there a gap, and what does that tell you?
+
+- is_summer and min temperature raise the prediction high, while precipitation and wind speed lower it. Nothing surprising here.
+
+- the train r2 score is 0.54 and test r2 is 0.46, they are close. On train data the variation is moderate and the model learned some real pattern. Test data is a bit lower, telling us that the model perform slightly wrose on new data/unseen data.
+'''

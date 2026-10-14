@@ -23,9 +23,9 @@ print('Intercept: ', model.intercept_)
 #Q2
 print('\t')
 x = np.array([10, 20, 30, 40, 50])
-print(x)
+print(x.shape)
 x = np.array([10, 20, 30, 40, 50]).reshape(-1,1) 
-print(x)
+print(x.shape)
 #scikit-learn only take 2d arrays, if you try to use a 1D array you will get an error; the @d shape represent (num_samples, num_features).
 
 # --- Linear Regression ---
@@ -69,10 +69,10 @@ X = temp_min.reshape(-1,1)
 #train and test the model
 X_train, X_test, y_train, y_test = train_test_split(X,temp_max, test_size=0.2, random_state=42)
 
-print('\t X_train: ', X_train)
-print('\t X_test: ', X_test)
-print('\t y_train: ', y_train)
-print('\t y_test: ', y_test)
+print('\t X_train: ', X_train.shape)
+print('\t X_test: ', X_test.shape)
+print('\t y_train: ', y_train.shape)
+print('\t y_test: ', y_test.shape)
 
 #Q3
 model = LinearRegression()
@@ -111,9 +111,12 @@ model_multi_train.fit(X_multi_train, y_multi_train)
 y_multi_pred = model_multi_train.predict(X_multi_test)
 
 r2_multi = model_multi_train.score(X_multi_test,y_multi_test)
-print('r2_multi: ', r2_multi)
+print('r2_multi: ', r2_multi , 'r2: ',r2)
 
 '''
+Compare the r2 and r2_multi values?
+- the r2_multi had a higher value than r2, which means that adding feature to a model can improve the performance of the model, and the model can explain more variance of the data.
+
 Add a comment interpreting the is_rainy coefficient. What does it represent in practical terms?
 - is_rainy coefficient shows that when it rains the max temperature is 3 degree lower, so it rain contribute to the max temperature.
 - In practical term if min temperature is held at a given temperature, the rain is still show to be effective in lowering the max temperature

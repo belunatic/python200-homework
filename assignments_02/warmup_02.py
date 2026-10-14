@@ -131,6 +131,9 @@ plt.title("Predicted vs Actual")
 plt.xlabel('Prediction')
 plt.ylabel('Actual')
 
+#save the plot to a file
+plt.savefig('./outputs/predicted_vs_actual_warmup.png')
+
 plt.show()
 
 '''

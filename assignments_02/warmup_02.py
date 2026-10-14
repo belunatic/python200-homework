@@ -110,7 +110,7 @@ model_multi_train = LinearRegression()
 model_multi_train.fit(X_multi_train, y_multi_train)
 y_multi_pred = model_multi_train.predict(X_multi_test)
 
-r2_multi = model_multi_train.score(X_multi_test,y_multi_pred)
+r2_multi = model_multi_train.score(X_multi_test,y_multi_test)
 print('r2_multi: ', r2_multi)
 
 '''

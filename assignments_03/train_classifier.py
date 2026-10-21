@@ -28,3 +28,24 @@ print(df.head())
 '''
 I picked City of Gardena, California, 90247, USA
 '''
+
+#engineering the 'good_for_running' column
+def good_for_running_func(row):
+    ''' A function to determin if the value for good_for_running column
+
+    parameter:
+        row: a row of the dataframe
+    '''
+    if (row["temperature_2m_max"] >= 7) and (row["temperature_2m_max"] <= 26) and (row["precipitation_sum"] < 3) and (row["wind_speed_10m_max"] < 30) and (row["temperature_2m_min"] >= 0):
+        return 1
+    else:
+        return 0
+
+df["good_for_running"] = df.apply(good_for_running_func, axis=1)
+print('\n')
+print(df["good_for_running"].value_counts())
+
+'''
+what fraction of days are good, and does that seem reasonable for your city's climate?
+- The fraction is 0.6, which seems reasonable with the climate of Gardena.
+'''

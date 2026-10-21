@@ -42,6 +42,7 @@ print(df.head())
 I picked City of Gardena, California, 90247, USA
 '''
 
+#Task 2: Engineer the Label
 #engineering the 'good_for_running' column
 def good_for_running_func(row):
     ''' A function to determin if the value for good_for_running column
@@ -62,3 +63,27 @@ print(df["good_for_running"].value_counts())
 what fraction of days are good, and does that seem reasonable for your city's climate?
 - The fraction is 0.6, which seems reasonable with the climate of Gardena.
 '''
+
+
+# Task 3: Build and Evaluate a KNN Classifier
+numerics = ["temperature_2m_max", "temperature_2m_min", "precipitation_sum", "wind_speed_10m_max"]
+X = df[numerics]
+y = df["good_for_running"]
+
+#train and test split
+X_train, X_test, y_train, y_test = train_test_split( X, y, test_size=0.2, random_state=42, stratify=y)
+
+# Choosing the k for KNN using cross-validation
+for k in [1,3,5,7,10,11,15,20,24, 30]:
+    knn = Pipeline([
+        ("scaler", StandardScaler()),
+        ("knn", KNeighborsClassifier(n_neighbors=k)),
+    ])
+    scores = cross_val_score(knn, X_train, y_train, cv=5)
+    print(f"k={k:2d}:  mean={scores.mean():.3f}  std={scores.std():.3f}")
+
+'''
+Why choose k = 3?
+- I chose k =3 because the cross-val mean is second highest (the the other one is a k =1, with high std, meaning not stable) and the cross-val std is lowest, making it strong and stable to use on the model.
+'''
+

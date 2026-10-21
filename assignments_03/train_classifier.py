@@ -66,8 +66,8 @@ what fraction of days are good, and does that seem reasonable for your city's cl
 
 
 # Task 3: Build and Evaluate a KNN Classifier
-numerics = ["temperature_2m_max", "temperature_2m_min", "precipitation_sum", "wind_speed_10m_max"]
-X = df[numerics]
+numerics_feature = ["temperature_2m_max", "temperature_2m_min", "precipitation_sum", "wind_speed_10m_max"]
+X = df[numerics_feature]
 y = df["good_for_running"]
 
 #train and test split
@@ -104,3 +104,32 @@ print("\nFinal test accuracy:", accuracy_score(y_test, y_pred))
 #Classification report
 print('\n Classification Report')
 print(classification_report(y_test, y_pred, target_names=["skip", "good"]))
+
+# Task 4: Build and Evaluate a Logistic Regression Classifier
+
+logreg_model = Pipeline([
+    ("scaler", StandardScaler()),
+    ("logreg", LogisticRegression(max_iter=1000)),
+])
+
+logreg_model.fit(X_train, y_train)
+
+y_pred = logreg_model.predict(X_test)
+
+#test accuracy
+print("\nFinal test accuracy:", accuracy_score(y_test, y_pred))
+
+#Classification report
+print('\n Classification Report')
+print(classification_report(y_test, y_pred, target_names=["skip", "good"]))
+
+#Coefficient of each feature
+print('\n')
+logreg = logreg_model.named_steps["logreg"]
+for name, coef in zip(numerics_feature, logreg.coef_[0]):
+    print(f"{name:20s}: {coef:+.2f}")
+
+'''
+which conditions most strongly push a day toward "skip"?
+Precipitation seem like the most define factor when it come to skipping a run for the day with highest negative value. To also point out Max temperature and Wind speed are negative with second factor in determined if a day is good for a run. 
+'''

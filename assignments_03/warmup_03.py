@@ -164,6 +164,7 @@ for name, coef in zip(features, logreg.coef_[0]):
 '''
 which features push most strongly toward "skip," and does that match your intuition about running weather?
 -Precipitation and wind speed have large negative coefficients, which means more rain and more wind both push a day strongly toward "skip." SInce the data was  tested on the 120 days the temperatures have small coeffiecients because the temperature range were not extreme. In short the coffecients match my intuition about running weather.
+- Positive coefficients increase the chance of “good”; negative coefficients increase the chance of “skip.”
 '''
 
 # Q3

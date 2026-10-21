@@ -12,7 +12,11 @@ from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score,
     confusion_matrix, ConfusionMatrixDisplay, classification_report,
 )
+
+import json
+import sys
 import joblib
+import os
 
 url = "https://archive-api.open-meteo.com/v1/archive"
 params = {
@@ -99,10 +103,10 @@ knn_model.fit(X_train,y_train)
 y_pred = knn_model.predict(X_test)
 
 #test accuracy
-print("\nFinal test accuracy:", accuracy_score(y_test, y_pred))
+print("\nFinal test accuracy for KNN:", accuracy_score(y_test, y_pred))
 
 #Classification report
-print('\n Classification Report')
+print('\n Classification Report for KNN:')
 print(classification_report(y_test, y_pred, target_names=["skip", "good"]))
 
 # Task 4: Build and Evaluate a Logistic Regression Classifier
@@ -117,10 +121,10 @@ logreg_model.fit(X_train, y_train)
 y_pred = logreg_model.predict(X_test)
 
 #test accuracy
-print("\nFinal test accuracy:", accuracy_score(y_test, y_pred))
+print("\nFinal test accuracy for Logistic Regression:", accuracy_score(y_test, y_pred))
 
 #Classification report
-print('\n Classification Report')
+print('\n Classification Report for Logistic Regression:')
 print(classification_report(y_test, y_pred, target_names=["skip", "good"]))
 
 #Coefficient of each feature
@@ -133,3 +137,56 @@ for name, coef in zip(numerics_feature, logreg.coef_[0]):
 which conditions most strongly push a day toward "skip"?
 Precipitation seem like the most define factor when it come to skipping a run for the day with highest negative value. To also point out Max temperature and Wind speed are negative with second factor in determined if a day is good for a run. 
 '''
+
+# Task 5: Compare and Choose
+'''
+Which model had higher accuracy on your data?
+ Logistic Regression model had a high accuracy of 0.91 compare to KNN 0.89
+'''
+
+'''
+For a running app, is accuracy the metric you care about most, or would you weigh precision or recall more heavily? Explain in terms of false positives (sent out on a bad day) and false negatives (missed a good day).
+- For a running app, accuracy is not a metric I care about, because two classifier can have the same accuracy produces many false alarms and the other misses many real cases. 
+-Recall matters more, because a False Negative means the app tells the user to skip a day that is actually good for running. Missing good days damages trust more than False Positives, where the app recommends running on a bad day. Precision is still useful, but recall is the metric that protects the user experience.
+'''
+
+'''
+Which model will you deploy, and why? Consider not only the scores but also model size, prediction speed, interpretability, and whether you want probability confidence scores. Either choice can be correct if you justify it.
+
+I will deploy the Logistic Regression Model, because it is light weight, can give me more information like probability score or skip or good in details and interpretability of why it made the choices it made( coefficient)
+'''
+
+# Task 6: Save the Model
+import sklearn
+import os
+
+#saving the model
+os.makedirs("models", exist_ok=True)
+
+# `model` is the fitted logistic regression Pipeline from the last lesson
+joblib.dump(logreg_model, "models/weather_classifier.pkl")
+print("\nModel saved.")
+
+
+#Saving MetaData fro the Model
+FEATURES = ["temperature_2m_max", "temperature_2m_min", "precipitation_sum", "wind_speed_10m_max"]
+
+metadata = {
+    "python_version": sys.version,
+    "sklearn_version": sklearn.__version__,
+    "city": "Gardena, CA",
+    "features": FEATURES,
+    "label": "good_for_running",
+    "test_accuracy": 0.91,
+    "test_f1": 0.92,
+    "label_rule": {
+        "temperature_2m_max": "7 to 26 C",
+        "temperature_2m_min": ">= 0 C",
+        "precipitation_sum": "< 3 mm",
+        "wind_speed_10m_max": "< 30 km/h",
+    },
+}
+
+with open("models/weather_classifier_metadata.json", "w") as f:
+    json.dump(metadata, f, indent=2)
+print("Metadata saved.")

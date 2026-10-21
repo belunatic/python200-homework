@@ -201,5 +201,5 @@ Actual 1  FN     TP
 '''
 how many false positives and how many false negatives did the model make, and which kind of error would matter more for a running app?
 - FP = 9 and FN = 7, A False Negative will matter more for a running app because the user will lose confidence in the app if it skips good days for running.
-- A False Positive (predicting “good” on a bad day) is annoying, but a False Negative feels like a lost opportunity, which users dislike more.git 
+- A False Positive (predicting “good” on a bad day) is annoying, but a False Negative feels like a lost opportunity, which users dislike more.
 '''

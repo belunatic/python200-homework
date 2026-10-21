@@ -87,3 +87,20 @@ Why choose k = 3?
 - I chose k =3 because the cross-val mean is second highest (the the other one is a k =1, with high std, meaning not stable) and the cross-val std is lowest, making it strong and stable to use on the model.
 '''
 
+#KNN Pipeline
+
+best_k =3
+knn_model = Pipeline([
+        ("scaler", StandardScaler()),
+        ("knn", KNeighborsClassifier(n_neighbors=k)),
+    ])
+
+knn_model.fit(X_train,y_train)
+y_pred = knn_model.predict(X_test)
+
+#test accuracy
+print("\nFinal test accuracy:", accuracy_score(y_test, y_pred))
+
+#Classification report
+print('\n Classification Report')
+print(classification_report(y_test, y_pred, target_names=["skip", "good"]))

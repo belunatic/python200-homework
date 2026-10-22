@@ -140,6 +140,7 @@ did scaling help, and why would scaling matter for a distance-based model?
 '''
 
 #Logistic Regression
+#Q1
 model = Pipeline([
     ("scaler", StandardScaler()),
     ("logreg", LogisticRegression(max_iter=1000)),
@@ -151,6 +152,7 @@ y_pred = model.predict(X_test)
 report = classification_report(y_test, y_pred, target_names=["skip", "good"], output_dict=True) #output to a dictionary so we can access the metrics easily
 
 print('\n')
+print('Accuracy Score:',accuracy_score(y_test, y_pred))
 print("Metrics for GOOD:")
 print(report['good']) #print the metrics for the "good" class
 
@@ -202,4 +204,21 @@ Actual 1  FN     TP
 how many false positives and how many false negatives did the model make, and which kind of error would matter more for a running app?
 - FP = 9 and FN = 7, A False Negative will matter more for a running app because the user will lose confidence in the app if it skips good days for running.
 - A False Positive (predicting “good” on a bad day) is annoying, but a False Negative feels like a lost opportunity, which users dislike more.
+'''
+
+# --Joblib ---
+#Q1
+
+#saving the model
+joblib.dump(model, "models/warmup_model.pkl")
+print("\nModel saved.")
+
+#load and test the saved model
+loaded = joblib.load("models/warmup_model.pkl")
+assert (loaded.predict(X_test) == model.predict(X_test)).all()
+print("Predictions match.")
+
+'''
+what would go wrong if you had saved only the LogisticRegression step without the scaler, then called .predict() on raw data?
+- If you save only the LogisticRegression step without the scaler, then call .predict() on raw data, the model will produce incorrect predictions. LogisticRegression was trained on scaled features, so its learned coefficients assume normalized inputs. Feeding raw values causes the model’s internal math to break: coefficients no longer match the feature magnitudes, the sigmoid saturates, and the model ends up predicting the wrong class with high confidence. This is why you must save the entire pipeline, not just the classifier.
 '''

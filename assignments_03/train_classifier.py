@@ -96,7 +96,7 @@ Why choose k = 3?
 best_k =3
 knn_model = Pipeline([
         ("scaler", StandardScaler()),
-        ("knn", KNeighborsClassifier(n_neighbors=k)),
+        ("knn", KNeighborsClassifier(n_neighbors=best_k)),
     ])
 
 knn_model.fit(X_train,y_train)

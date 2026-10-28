@@ -60,6 +60,14 @@ def test_good_day_predicted_good(clf):
     ])
     assert result[0].label == "good"
 
+'''
+The above call [def test_good_day_predicted_good(clf)]?
+- when pytest see the "clf" this are the steps it takes:
+- - This test need something called "clf"
+- - Pytest then search for a fixture named 'clf'
+- - Finds it and executes it.
+'''
+
 
 def test_bad_day_predicted_skip(clf):
     result = clf.predict([

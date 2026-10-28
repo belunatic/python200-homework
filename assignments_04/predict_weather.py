@@ -20,3 +20,9 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+'''
+Why this script exist?
+- This script exists to demonstrate abd test a real user would load the save model and make predictions.
+- the safe guard [ __init__ =="__main__] is to prevent the file execution when import and only execute when called directly
+'''

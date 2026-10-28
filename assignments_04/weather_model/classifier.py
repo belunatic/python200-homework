@@ -32,7 +32,7 @@ class WeatherClassifier:
         self.model = joblib.load(model_path)
         self.features = FEATURES
 
-    def predict(self, days: list[dict], threshold :float = 0.7) -> list[Prediction]:
+    def predict(self, days: list[dict], threshold :float = None) -> list[Prediction]:
         """Predict whether each day is good for running.
 
         Args:
@@ -57,7 +57,18 @@ class WeatherClassifier:
         labels = self.model.predict(X)
         probabilities = self.model.predict_proba(X)[:, 1]
 
-        return [
-            Prediction("good" if int(label) == 1 and float(prob)>= threshold else "skip", float(prob))
-            for label, prob in zip(labels, probabilities)
-        ]
+        predictions = []
+
+        for label, prob in zip(labels, probabilities):
+            if threshold is None:
+                result = "good" if int(label) == 1 else "skip"
+            else:
+                result = (
+                    "good"
+                    if int(label) == 1 and prob >= threshold
+                    else "skip"
+                )
+
+            predictions.append(Prediction(result, float(prob)))
+
+        return predictions

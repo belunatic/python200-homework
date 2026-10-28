@@ -13,10 +13,10 @@ class ModeInfo:
             self.data = json.load(file)
 
     def feature_count(self) -> int:
-        print(len(self.data["features"]))
+        return len(self.data["features"])
 
 json_info = ModeInfo('features.json')
-json_info.feature_count()
+print(json_info.feature_count())
 print('\n')
 
 '''

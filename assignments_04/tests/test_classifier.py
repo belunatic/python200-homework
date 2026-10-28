@@ -10,7 +10,7 @@ import json
 from weather_model import WeatherClassifier, Prediction, FEATURES
 
 '''
-@oytest.fixture -> is a reusable setup fucntion that pytest automatically  injects into your test
+@oytest.fixture -> is a reusable setup function that pytest automatically  injects into your test
 '''
 
 '''
@@ -85,6 +85,17 @@ def test_bad_day_predicted_skip(clf):
 def test_random_running_day_weather(clf,data, expected, reason):
     result = clf.predict([data])
     assert result[0].label == expected , reason
+
+@pytest.mark.parametrize("data,threshold, expected", 
+        [
+            ({"temperature_2m_max": 23, "temperature_2m_min": 9, "precipitation_sum": 0.0, "wind_speed_10m_max": 20},0.6, "good" ),
+            ({"temperature_2m_max": 23, "temperature_2m_min": 9, "precipitation_sum": 0.0, "wind_speed_10m_max": 20},0.5, "good" ),
+            ({"temperature_2m_max": 23, "temperature_2m_min": 9, "precipitation_sum": 0.0, "wind_speed_10m_max": 20},0.97, "skip" ),
+            ]
+)
+def test_random_running_day_weather(clf,data,threshold, expected):
+    result = clf.predict([data], threshold)
+    assert result[0].label == expected 
 
 
 def test_probability_is_between_zero_and_one(clf):

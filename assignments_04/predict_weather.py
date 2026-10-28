@@ -7,6 +7,7 @@ SAMPLE_DAYS = [
     {"temperature_2m_max": 22, "temperature_2m_min": 13, "precipitation_sum": 9.0, "wind_speed_10m_max": 14},
     {"temperature_2m_max": 25, "temperature_2m_min": 15, "precipitation_sum": 0.0, "wind_speed_10m_max": 33},
     {"temperature_2m_max": 19, "temperature_2m_min": 10, "precipitation_sum": 1.0, "wind_speed_10m_max": 29},
+    {"temperature_2m_max": 23, "temperature_2m_min": 9, "precipitation_sum": 0.0, "wind_speed_10m_max": 20},
 ]
 
 

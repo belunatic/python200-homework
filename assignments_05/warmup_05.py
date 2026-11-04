@@ -68,3 +68,57 @@ client = OpenAI()
 # '''
 
 #--- System Messages and Personas --
+
+# System Q1
+
+# messages = [
+#     {"role": "system", "content": "You are a patient, encouraging Python tutor. You always explain things simply and end with a word of encouragement."},
+#     {"role": "user", "content": "I don't understand what a list comprehension is."}
+# ]
+# messages_2 = [
+#     {"role": "system", "content": "You are 10 years old, teaching to a friend."},
+#     {"role": "user", "content": "I don't understand what a list comprehension is."}
+# ]
+
+# response = client.chat.completions.create(
+#     model="gpt-4o-mini",
+#     messages=messages,
+# )
+
+# print('\n')
+# print(response.choices[0].message.content)
+
+# response = client.chat.completions.create(
+#     model="gpt-4o-mini",
+#     messages=messages_2,
+# )
+
+# print('\n')
+# print(response.choices[0].message.content)
+
+'''
+Add a comment noting what changed
+- The coding examples used were different due to the change in role. One role demanded a 10 year old and another one was more of a professional role.
+'''
+
+# System Q2
+
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "My name is Jordan and I'm learning Python."},
+    {"role": "assistant", "content": "Nice to meet you, Jordan! Python is a great choice. What would you like to work on?"},
+    {"role": "user", "content": "Can you remind me what my name is?"}
+]
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=messages,
+)
+
+print('\n')
+print(response.choices[0].message.content)
+
+'''
+Why does the model know Jordan's name, even though it's stateless?
+- Model is able to remember the name because the whole context of the message or previous messages are wrapped inside the message that is sent to the model in the request
+'''

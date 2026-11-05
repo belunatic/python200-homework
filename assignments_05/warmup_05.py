@@ -9,92 +9,92 @@ load_dotenv()
 #create a OpenAI object
 client = OpenAI()
 
-# response = client.chat.completions.create(
-#     model="gpt-4o-mini",
-#     messages=[{"role": "user", "content": "What is one thing that makes Python a good language for beginners?"}]
-# )
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "What is one thing that makes Python a good language for beginners?"}]
+)
 
-# print(response.choices[0].message.content)
-# print('\n')
-# print(response.model)
-# print('\n')
-# print(response.usage)
-# print('\n')
+print(response.choices[0].message.content)
+print('\n')
+print(response.model)
+print('\n')
+print(response.usage)
+print('\n')
 
 #API Q2
-# prompt = "Suggest a creative name for a data engineering consultancy."
-# temperatures = [0, 0.7, 1.5]
+prompt = "Suggest a creative name for a data engineering consultancy."
+temperatures = [0, 0.7, 1.5]
 
-# for temp in temperatures:
-#     response = client.chat.completions.create(
-#     model="gpt-4o-mini",
-#     messages=[{"role": "user", "content": "Suggest a creative name for a data engineering consultancy."}], 
-#     temperature = temp
-# )
-#     print(f"Temperature: {temp} \n {response.choices[0].message.content}\n")
+for temp in temperatures:
+    response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Suggest a creative name for a data engineering consultancy."}], 
+    temperature = temp
+)
+    print(f"Temperature: {temp} \n {response.choices[0].message.content}\n")
 
-# '''
-# What do you notice about how the outputs differ? Which temperature would you use if you needed a consistent, reproducible output?
-# - Yes, the temp = 0 the name leaned more toward engineering terms. Looked and felt very rigid
-# - temp = 0.7, involve more creativity and varied more and way better
-# - temp = 1.5, gave me only one results, so it lack the creativity of precision on the task.
-# - I would use the temp = 0.7
+'''
+What do you notice about how the outputs differ? Which temperature would you use if you needed a consistent, reproducible output?
+- Yes, the temp = 0 the name leaned more toward engineering terms. Looked and felt very rigid
+- temp = 0.7, involve more creativity and varied more and way better
+- temp = 1.5, gave me only one results, so it lack the creativity of precision on the task.
+- I would use the temp = 0.7
 # '''
 
 # API Q3
-# response = client.chat.completions.create(
-#     model="gpt-4o-mini",
-#     messages=[{"role": "user", "content": "Give me a one-sentence fun fact about pandas (the animal, not the library)."}],
-#     n=3,
-#     temperature=1.0
-# )
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Give me a one-sentence fun fact about pandas (the animal, not the library)."}],
+    n=3,
+    temperature=1.0
+)
 
-# for res in response.choices:
-#     print(f"{res.message.content} \n")
+for res in response.choices:
+    print(f"{res.message.content} \n")
 
 # API Q4
-# response = client.chat.completions.create(
-#     model="gpt-4o-mini",
-#     messages=[{"role": "user", "content": "Explain how neural networks work."}],
-#     max_tokens = 15
-# )
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Explain how neural networks work."}],
+    max_tokens = 15
+)
 
-# print(response.choices[0].message.content)
+print(response.choices[0].message.content)
 
-# '''
-# What happened, and why might you want to use max_tokens in a real application?
-# - The response had a max of 14  words and the sentence was not completed.
-# - The reason this is useful is because it help with keeping cost under control. Most model have a cut off of how many token you can use before getting charged.
-# '''
+'''
+What happened, and why might you want to use max_tokens in a real application?
+- The response had a max of 14  words and the sentence was not completed.
+- The reason this is useful is because it help with keeping cost under control. Most model have a cut off of how many token you can use before getting charged.
+'''
 
 #--- System Messages and Personas --
 
 # System Q1
 
-# messages = [
-#     {"role": "system", "content": "You are a patient, encouraging Python tutor. You always explain things simply and end with a word of encouragement."},
-#     {"role": "user", "content": "I don't understand what a list comprehension is."}
-# ]
-# messages_2 = [
-#     {"role": "system", "content": "You are 10 years old, teaching to a friend."},
-#     {"role": "user", "content": "I don't understand what a list comprehension is."}
-# ]
+messages = [
+    {"role": "system", "content": "You are a patient, encouraging Python tutor. You always explain things simply and end with a word of encouragement."},
+    {"role": "user", "content": "I don't understand what a list comprehension is."}
+]
+messages_2 = [
+    {"role": "system", "content": "You are 10 years old, teaching to a friend."},
+    {"role": "user", "content": "I don't understand what a list comprehension is."}
+]
 
-# response = client.chat.completions.create(
-#     model="gpt-4o-mini",
-#     messages=messages,
-# )
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=messages,
+)
 
-# print('\n')
-# print(response.choices[0].message.content)
+print('\n')
+print(response.choices[0].message.content)
 
-# response = client.chat.completions.create(
-#     model="gpt-4o-mini",
-#     messages=messages_2,
-# )
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=messages_2,
+)
 
-# print('\n')
-# print(response.choices[0].message.content)
+print('\n')
+print(response.choices[0].message.content)
 
 '''
 Add a comment noting what changed
@@ -103,20 +103,20 @@ Add a comment noting what changed
 
 # System Q2
 
-# messages = [
-#     {"role": "system", "content": "You are a helpful assistant."},
-#     {"role": "user", "content": "My name is Jordan and I'm learning Python."},
-#     {"role": "assistant", "content": "Nice to meet you, Jordan! Python is a great choice. What would you like to work on?"},
-#     {"role": "user", "content": "Can you remind me what my name is?"}
-# ]
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "My name is Jordan and I'm learning Python."},
+    {"role": "assistant", "content": "Nice to meet you, Jordan! Python is a great choice. What would you like to work on?"},
+    {"role": "user", "content": "Can you remind me what my name is?"}
+]
 
-# response = client.chat.completions.create(
-#     model="gpt-4o-mini",
-#     messages=messages,
-# )
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=messages,
+)
 
-# print('\n')
-# print(response.choices[0].message.content)
+print('\n')
+print(response.choices[0].message.content)
 
 '''
 Why does the model know Jordan's name, even though it's stateless?
@@ -132,18 +132,18 @@ reviews = [
     "Great price, but the documentation is nearly impossible to follow."
 ]
 
-# for i,review in enumerate(reviews):
-#     prompt = [
-#         {"role": "system", "content": "classify the sentiment of this review below as positive, negative, or mixed only"},
-#         {"role": "user", "content": review}
-#     ]
-#     response = client.chat.completions.create(
-#     model="gpt-4o-mini",
-#     messages=prompt
-#     )
+for i,review in enumerate(reviews):
+    prompt = [
+        {"role": "system", "content": "classify the sentiment of this review below as positive, negative, or mixed only"},
+        {"role": "user", "content": review}
+    ]
+    response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=prompt
+    )
 
-#     print('\n')
-#     print(f"{i+1}. {response.choices[0].message.content}")
+    print('\n')
+    print(f"{i+1}. {response.choices[0].message.content}")
 
 
 # Prompt Q2
@@ -154,18 +154,18 @@ Review: "Fast shipping but the item arrived damaged."
 Sentiment: mixed
 '''
 
-# for review in reviews:
-#     prompt = [
-#         {"role": "system", "content": prompt_content},
-#         {"role": "user", "content": review}
-#     ]
-#     response = client.chat.completions.create(
-#     model="gpt-4o-mini",
-#     messages=prompt
-#     )
+for review in reviews:
+    prompt = [
+        {"role": "system", "content": prompt_content},
+        {"role": "user", "content": review}
+    ]
+    response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=prompt
+    )
 
-#     print('\n')
-#     print(response.choices[0].message.content)
+    print('\n')
+    print(response.choices[0].message.content)
 
 '''
 Did adding one example change the format or consistency of the output compared to Q1?
@@ -188,18 +188,18 @@ Review: "Fast shipping and great packaging, but the item arrived with a damaged 
 Sentiment: mixed
 """
 
-# for review in reviews:
-#     prompt = [
-#         {"role": "system", "content": prompt_content},
-#         {"role": "user", "content": review}
-#     ]
-#     response = client.chat.completions.create(
-#     model="gpt-4o-mini",
-#     messages=prompt
-#     )
+for review in reviews:
+    prompt = [
+        {"role": "system", "content": prompt_content},
+        {"role": "user", "content": review}
+    ]
+    response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=prompt
+    )
 
-#     print('\n')
-#     print(response.choices[0].message.content)
+    print('\n')
+    print(response.choices[0].message.content)
 
 '''
 Add a comment comparing all three approaches (zero-shot, one-shot, few-shot): When would you choose each one?
@@ -227,17 +227,17 @@ messages = '''A data engineer earns $85,000 per year. She gets a 12% raise, then
 takes a new job that pays $7,500 more per year than her post-raise salary.
 What is her final annual salary?'''
 
-# prompt = [
-#         {"role": "system", "content": prompt_content},
-#         {"role": "user", "content": messages}
-#     ]
-# response = client.chat.completions.create(
-# model="gpt-4o-mini",
-# messages=prompt
-# )
+prompt = [
+        {"role": "system", "content": prompt_content},
+        {"role": "user", "content": messages}
+    ]
+response = client.chat.completions.create(
+model="gpt-4o-mini",
+messages=prompt
+)
 
-# print('\n')
-# print(response.choices[0].message.content)
+print('\n')
+print(response.choices[0].message.content)
 
 '''
 Why does asking the model to reason step by step tend to improve accuracy on problems like this?
@@ -257,19 +257,19 @@ but the UI is clunky and the export options are limited."
 """
 }]
 
-# response = client.chat.completions.create(
-# model="gpt-4o-mini",
-# messages=prompt
-# )
+response = client.chat.completions.create(
+model="gpt-4o-mini",
+messages=prompt
+)
 
-# # Parse JSON safely
-# try:
-#     result = json.loads(response.choices[0].message.content)
-#     print("Parsed sentiment:", result["sentiment"])
-#     print("Confidence:", result["confidence"])
-#     print("Reason:", result["reason"])
-# except json.JSONDecodeError:
-#     print("Error: response was not valid JSON")
+# Parse JSON safely
+try:
+    result = json.loads(response.choices[0].message.content)
+    print("Parsed sentiment:", result["sentiment"])
+    print("Confidence:", result["confidence"])
+    print("Reason:", result["reason"])
+except json.JSONDecodeError:
+    print("Error: response was not valid JSON")
 
 
 #Prompt Q6

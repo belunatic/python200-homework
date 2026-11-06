@@ -270,3 +270,17 @@ def run_chatbot():
 
 if __name__ == "__main__":
     run_chatbot()
+
+# Task 6
+
+'''
+What could go wrong if a job-seeker submitted the bot's output directly — without reviewing it — to a real employer?
+- The bot has a chance of adding false information or hallucinating on the output. A real employer maybe able to detect the sloppiness of the resume and ruin the chance of the candidate to get a job or they might picking up the wrong candidate for the job because the output may have mislead the decision
+'''
+
+'''
+What is one guardrail you would add if you were deploying this tool professionally? (A guardrail is any design choice that reduces the chance of harm — a UI warning, a moderation filter, a usage policy, a disclaimer, or something else entirely.)
+- I will definitely check for harmful text and flag them as we did on this chatbot
+- I will will emphasize at end of the each cover letter and bullet function to review the output
+- Add a disclaimer that this bot is not guarantee getting a call back from employer but assist you in getting you there.
+'''

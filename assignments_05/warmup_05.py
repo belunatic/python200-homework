@@ -295,6 +295,28 @@ response = client.chat.completions.create(
 
 print(response.choices[0].message.content)
 
+#second prompt
+prompt_2 = f"""
+You will be given text inside triple backticks.
+If it contains step-by-step instructions, rewrite them as a numbered list.
+If it does not contain instructions, respond with exactly: "No steps provided."
+
+I just want food
+"""
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": prompt_2}],
+)
+
+print('\n')
+print(response.choices[0].message.content)
+
+'''
+What problem do delimiters help prevent?
+- Delimiters help separate the sections, therefore the model con't lose track where one part ends and the next begins.
+'''
+
 # --- Local Models with Ollama
 
 response = client.chat.completions.create(

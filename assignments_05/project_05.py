@@ -36,7 +36,7 @@ def get_completion(messages, model="gpt-4o-mini", temperature=0.7):
     return response.choices[0].message.content
 
 #system prompt
-system_prompt = {'role': 'system', 'content': ''' You are a recruiter and helping someone get a job interview, they will share some information and material with you. As you review these material and information, I want you to Stay focus on a job application materials, always remind them to review and edit the output before submitting anywhere and lastly, but not least, acknowledge that you may not know the user's specific industry norms, and that the user should use their own judgment '''}
+system_prompt = ''' You are a recruiter and helping someone get a job interview, they will share some information and material with you. As you review these material and information, I want you to Stay focus on a job application materials, always remind them to review and edit the output before submitting anywhere and lastly, but not least, acknowledge that you may not know the user's specific industry norms, and that the user should use their own judgment '''
 
 '''
 explaining at least one deliberate choice you made in writing the system prompt and why?
@@ -177,15 +177,96 @@ def is_safe(text: str) -> bool:
     )
     flagged = result.results[0].flagged
     
-    print(result.results[0].categories)
+    # print(result.results[0].categories)
     # Your code here: return True if safe, False if flagged, and print a message if flagged
     if not flagged:
         return True
     else:
-        return 'Sorry, but can you rephrase your statement'
+        print('Sorry, but can you rephrase your statement')
+        return False
 
 #test
 print('\n')
 print(is_safe("You're a complete idiot and a waste of space."))
 print('\n')
 print(is_safe('I am in love with someone and I am shy'))
+
+# Task 5
+
+def run_chatbot():
+    # 1. Initialize conversation history with your system prompt
+    messages = [
+        {"role": "system", "content": system_prompt}
+    ]
+
+    print("=" * 50)
+    print("Job Application Helper")
+    print("=" * 50)
+    print("I can help you with:")
+    print("  1. Rewriting resume bullet points")
+    print("  2. Drafting a cover letter opening")
+    print("  3. Any other questions about your application")
+    print("\nType 'quit' at any time to exit.\n")
+
+    while True:
+        user_input = input("You: ").strip()
+
+        # 2. Handle exit
+        if user_input.lower() in {"quit", "exit"}:
+            print("\nJob Application Helper: Good luck with your applications!")
+            break
+
+        # 3. Skip empty input
+        if not user_input:
+            continue
+
+        # 4. Run moderation check before doing anything else
+        if not is_safe(user_input):
+            continue  # is_safe() already printed the warning message
+
+        # 5. Check if the user wants to rewrite bullets
+        #    (hint: look for keywords like "bullet" or "resume" in user_input.lower())
+        if "bullet" in user_input.lower() or "resume" in user_input.lower():
+            print("\nJob Application Helper: Paste your bullet points below, one per line.")
+            print("When you're done, type 'DONE' on its own line.\n")
+            raw_bullets = []
+            while True:
+                line = input().strip()
+                if line.upper() == "DONE":
+                    break
+                if line:
+                    raw_bullets.append(line)
+            # YOUR CODE: call rewrite_bullets() and print the results
+            rewrite_bullets(raw_bullets)
+
+        # 6. Check if the user wants a cover letter
+        elif "cover letter" in user_input.lower():
+            job_title = input("Job Application Helper: What is the job title? ").strip()
+            background = input("Job Application Helper: Briefly describe your background: ").strip()
+            # YOUR CODE: call generate_cover_letter() and print the result
+            result = generate_cover_letter(job_title, background)
+            print('\n')
+            print(result)
+
+        # 7. Otherwise, handle it as a regular chat turn
+        else:
+            # YOUR CODE:
+            # - Append the user's message to `messages`
+            messages.append({'role': 'user', 'content': user_input})
+            # - Call get_completion(messages)
+            print('----')
+            print(messages)
+            print('----')
+            response = get_completion(messages)
+            # - Print the reply
+            print(response)
+            # - Append the reply to `messages` as an assistant message
+            messages.append({'role': 'assistant', 'content': response})
+            #check message length
+            print('\n')
+            print('Message length: ', len(messages))
+            pass
+
+
+if __name__ == "__main__":
+    run_chatbot()

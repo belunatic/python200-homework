@@ -107,3 +107,64 @@ bullets = [
 ]
 
 rewrite_bullets(bullets)
+
+# Task 3
+
+def generate_cover_letter(job_title: str, background: str) -> str:
+    prompt = f"""
+    You write strong cover letter opening paragraphs for career changers.
+    The paragraph should be 3-5 sentences: confident, specific, and free of clichés.
+
+    Here are two examples of the style and tone you should match:
+
+    Example 1:
+    Role: Data Analyst at a healthcare nonprofit
+    Background: Seven years as a registered nurse, recently completed a data analytics bootcamp.
+    Opening: After seven years as a registered nurse, I've spent my career making decisions
+    under pressure using incomplete information — which turns out to be excellent training for
+    data analysis. I recently completed a data analytics program where I built dashboards
+    tracking patient outcomes across departments. I'm excited to bring that combination of
+    clinical context and technical skill to [Company]'s mission-driven work.
+
+    Example 2:
+    Role: Junior Software Engineer at a fintech startup
+    Background: Ten years in retail banking operations, self-taught Python developer for two years.
+    Opening: I spent a decade on the operations side of banking, watching technology decisions
+    get made by people who had never processed a wire transfer or resolved a failed ACH batch.
+    That frustration turned into curiosity, and two years of self-teaching Python later, I'm
+    ready to be on the other side of those decisions. I'm applying to [Company] because your
+    work on payment infrastructure is exactly where my domain expertise and new technical skills
+    intersect.
+
+    Now write an opening paragraph for this person:
+    Role: {job_title}
+    Background: {background}
+    Opening:
+    """
+
+    messages = [{"role": "user", "content": prompt}]
+
+    return get_completion(messages)
+
+#Test 
+job_title = "Junior Data Engineer"
+background = "Five years of experience as a middle school math teacher; recently completed \
+a Python course and built data pipelines using Pandas."
+job_title_2 = "Data Engineer"
+background_2 = "I have spent over 5 years as a web developer; I am currently working through a data engineering class and building pipeline using panda and python"
+
+
+result = generate_cover_letter(job_title, background)
+result_2 = generate_cover_letter(job_title_2, background_2)
+
+print('\n')
+print(result)
+print('\n')
+print(result_2)
+
+
+'''
+Why did you choose those particular examples? What does the few-shot pattern help control in the output?
+- The examples here were already written for me in the task
+- Few-shot pattern help the model / AI recognize pattern and deliver more accurate responses 
+'''

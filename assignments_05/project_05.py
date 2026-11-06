@@ -92,7 +92,7 @@ def rewrite_bullets(bullets: list[str]) -> list[dict]:
     try:
         response = get_completion(messages)
         results = parse_llm_json(response)
-        # print(responses, results)
+
         print('\n')
         for result in results:
             print(f"{result['original']} \t {result['improved']}" )
@@ -168,3 +168,24 @@ Why did you choose those particular examples? What does the few-shot pattern hel
 - The examples here were already written for me in the task
 - Few-shot pattern help the model / AI recognize pattern and deliver more accurate responses 
 '''
+
+# Task 4
+def is_safe(text: str) -> bool:
+    result = client.moderations.create(
+        model="omni-moderation-latest",
+        input=text
+    )
+    flagged = result.results[0].flagged
+    
+    print(result.results[0].categories)
+    # Your code here: return True if safe, False if flagged, and print a message if flagged
+    if not flagged:
+        return True
+    else:
+        return 'Sorry, but can you rephrase your statement'
+
+#test
+print('\n')
+print(is_safe("You're a complete idiot and a waste of space."))
+print('\n')
+print(is_safe('I am in love with someone and I am shy'))

@@ -108,6 +108,11 @@ bullets = [
 
 rewrite_bullets(bullets)
 
+'''
+What makes these bullets weak, and what kinds of changes did the model suggest?
+- The bullets lack details, confidence, and specification. the AI suggested those changes and added more details to them.
+'''
+
 # Task 3
 
 def generate_cover_letter(job_title: str, background: str) -> str:

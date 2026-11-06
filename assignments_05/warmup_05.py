@@ -264,6 +264,9 @@ messages=prompt
 
 # Parse JSON safely
 try:
+    print('\n')
+    print(response.choices[0].message.content)
+    print('\n')
     result = json.loads(response.choices[0].message.content)
     print("Parsed sentiment:", result["sentiment"])
     print("Confidence:", result["confidence"])

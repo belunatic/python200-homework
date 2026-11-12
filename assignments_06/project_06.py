@@ -46,20 +46,20 @@ questions = [
     "Do you offer catering or wholesale orders?",
 ]
 
-# for q in questions:
-#     print('\n', '*' *30)
-#     print(f"\nQ: {q}")
-#     response = query_engine.query(q)
-#     print("A:", response)
-#     print('\n')
+for q in questions:
+    print('\n', '*' *30)
+    print(f"\nQ: {q}")
+    response = query_engine.query(q)
+    print("A:", response)
+    print('\n')
     
-#     for node_with_score in response.source_nodes:
-#         print(f"Node ID: {node_with_score.node.node_id}")
-#         print(f"Similarity Score: {node_with_score.score:.4f}")
-#         print(f"Text Snippet: {node_with_score.node.get_content()[:150]}...")
-#         print("-" * 30)
+    for node_with_score in response.source_nodes:
+        print(f"Node ID: {node_with_score.node.node_id}")
+        print(f"Similarity Score: {node_with_score.score:.4f}")
+        print(f"Text Snippet: {node_with_score.node.get_content()[:150]}...")
+        print("-" * 30)
 
-#     print('\n')
+    print('\n')
 
 '''
 did the assistant sound confident and accurate? Did any of the answers surprise you?

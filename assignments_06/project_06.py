@@ -55,6 +55,7 @@ for q in questions:
     
     for node_with_score in response.source_nodes:
         print(f"Node ID: {node_with_score.node.node_id}")
+        print(f"Filename: {node_with_score.node.metadata["file_name"]}")
         print(f"Similarity Score: {node_with_score.score:.4f}")
         print(f"Text Snippet: {node_with_score.node.get_content()[:150]}...")
         print("-" * 30)
@@ -76,6 +77,7 @@ print('\n')
 
 for node_with_score in response.source_nodes:
     print(f"Node ID: {node_with_score.node.node_id}")
+    print(f"Filename: {node_with_score.node.metadata["file_name"]}")
     print(f"Similarity Score: {node_with_score.score:.4f}")
     print(f"Text Snippet: {node_with_score.node.get_content()[:200]}...")
     print("-" * 30)

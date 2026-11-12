@@ -168,6 +168,10 @@ print('\n')
 print('-'* 30)
 print(answer)
 
+'''
+My prediction was correct there was no relevant content so it return 'None Found'
+'''
+
 # Semantic RAG Concepts
 '''
 What is a vector embedding? (1-2 sentences)

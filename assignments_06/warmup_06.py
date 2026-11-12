@@ -204,7 +204,7 @@ Settings.embed_model = OpenAIEmbedding(model="text-embedding-3-small")
 Settings.llm = OpenAI(model="gpt-4o-mini")
 
 # Load documents directly from PDFs in the folder
-docs = SimpleDirectoryReader("brightleaf_pdfs").load_data()
+docs = SimpleDirectoryReader("./resources/brightleaf_pdfs").load_data()
 
 # LlamaIndex provides a default storage index called VectorStoreIndex to store the chunked and embedded text from the documents
 # Build a vector index automatically (handles chunking + embeddings)

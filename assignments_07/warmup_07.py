@@ -13,6 +13,9 @@ if load_dotenv():
 else:
     print('Warning: could not load environment variables from .env')
 
+#get API key
+api_key = os.getenv("OPENAI_API_KEY")
+
 client = OpenAI()
 print('OpenAI client created.')
 
@@ -157,10 +160,10 @@ How many API calls will be made to answer this query?
 '''
 
 # Run_agent does not include the function/ tool in use
-# print('\n')
-# answer_from_agent = run_agent("Convert 100 degrees Celsius to Fahrenheit")
-# print('\n')
-# print(answer_from_agent)
+print('\n')
+answer_from_agent = run_agent("Convert 100 degrees Celsius to Fahrenheit")
+print('\n')
+print(answer_from_agent)
 
 '''
 My predictions was half right, it did try to use a tool and tried call the celsius_to_fahrenheit method. The results were an error, it was not able to run it. Therefore it took it further and using it training dataset it was able to convert the temp to right fahrenheit
@@ -293,6 +296,8 @@ No tools were called on this response, there was no need to use a tool because i
 '''
 
 # ---- Lesson 03: Multi-Tool Agent ---
+
+# Q4
 
 RESOURCES_DIR = Path("resources")
 RESOURCES_DIR
@@ -504,16 +509,16 @@ print("Class defined")
 
 # Tool Schema
 
-csv_backend = CsvManager(RESOURCES_DIR)
+csv_manager = CsvManager(RESOURCES_DIR)
 
 node_tools = {
-    "list_csv_files": csv_backend.list_csv_files,
-    "load_csv": csv_backend.load_csv,
-    "get_columns": csv_backend.get_columns,
-    "summarize_columns": csv_backend.summarize_columns,
-    "describe_column": csv_backend.describe_column,
-    "plot_data": csv_backend.plot_data,
-    "compute_correlation": csv_backend.compute_correlation,
+    "list_csv_files": csv_manager.list_csv_files,
+    "load_csv": csv_manager.load_csv,
+    "get_columns": csv_manager.get_columns,
+    "summarize_columns": csv_manager.summarize_columns,
+    "describe_column": csv_manager.describe_column,
+    "plot_data": csv_manager.plot_data,
+    "compute_correlation": csv_manager.compute_correlation,
 }
 
 tools_schema = [
@@ -714,4 +719,254 @@ def run_agent_cycle(messages, user_text, max_tool_rounds=5):
 
     return "I hit the tool-round limit. Try a simpler request."
 
-# Q4
+# Q5
+
+SYSTEM_PROMPT = (
+    "You are a small data assistant for CSV files stored in resources/. "
+    "Use the available tools to do any data work (do not guess). "
+    "If no CSV is loaded yet, load one first (or list available CSV files). "
+    "Keep answers short and student-friendly."
+)
+
+def run_agent():
+    """
+    Simple command-line chat loop so it feels like a chatbot.
+
+    We keep a single 'messages' list for the whole session so the model
+    sees the conversation history each turn.
+    """
+    messages = [
+        {
+            "role": "system",
+            "content": SYSTEM_PROMPT
+        }
+    ]
+
+    print("CSV data agent at your service. Here to help look at your CSV data!")
+    print("Type a question. Type 'exit' to quit.\n")
+    print("To start, try 'list csv files' or 'load bike_commute.csv'\n")
+
+    while True:
+        user_text = input("You: ").strip()
+        if user_text.lower() in ["exit", "quit", "q"]:
+            print("Bye.")
+            break
+        
+        print(f"User query: {user_text}")
+        assistant_text = run_agent_cycle(messages, user_text)
+        print(f"\nAssistant: {assistant_text}\n")
+
+
+print('\n')
+messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+result = run_agent_cycle(messages, "Load bike_commute.csv and compute the correlation between avg_traffic_density and avg_speed_kmh.")
+print(result)
+
+# Q6
+'''
+Add a comment above the print that identifies what each role (system, user, assistant, tool) represents in the ReAct loop.
+- System is the instruction on how LLM should be and the constrains
+- User is the query that is sent in to LLM
+- Assistant is the LLM, the part or ReAct that is reasoning to ether use a tool or respond directly
+- Tool are tool that the LLM has access to, can use them and return the result to the LLM as input.
+'''
+
+print('\n')
+print(json.dumps(messages, indent=2, default=str))
+
+# --- Lesson 04: smolagents ---
+
+# Q7
+
+# smolagents imports
+from smolagents import ToolCallingAgent, OpenAIServerModel, tool
+from smolagents import CodeAgent
+
+# Tool decorator
+# Observe the decorator call the function that are already define above
+# this part is like the tool_nodes variable
+
+@tool
+def list_csv_files() -> dict:
+    """List available CSV files in resources/.
+
+    Returns:
+        A dict with a "files" list, or a message if none are found.
+    """
+    return csv_manager.list_csv_files()
+
+
+@tool
+def load_csv(filename: str) -> dict:
+    """Load a CSV file from resources/ and make it the active dataset.
+
+    Args:
+        filename: CSV filename in resources/. You can pass "bike_commute" or "bike_commute.csv".
+
+    Returns:
+        A dict with a status message and column names, or an error dict.
+    """
+    return csv_manager.load_csv(filename)
+
+
+@tool
+def get_columns() -> list[str] | dict:
+    """Return column names for the currently loaded CSV.
+
+    Returns:
+        A list of column names, or an error dict if no CSV is loaded.
+    """
+    return csv_manager.get_columns()
+
+
+@tool
+def summarize_columns(columns: list[str] | None = None) -> dict:
+    """Return summary stats for selected columns (or all columns). 
+    This includes count, mean, std, min, max, and percentiles for numeric columns,
+    or count, unique, top, freq for categorical columns.
+
+    Args:
+        columns: Column names to summarize. If None, summarizes all columns.
+
+    Returns:
+        A dict of summary statistics (from pandas.describe), or an error dict.
+    """
+    return csv_manager.summarize_columns(columns)
+
+
+@tool
+def describe_column(column: str) -> dict:
+    """Describe a single column (basic stats) for the requested column.
+    This includes count, mean, std, min, max, and percentiles for numeric column,
+    or count, unique, top, freq for categorical column.
+
+    Args:
+        column: The name of the column to describe.
+
+    Returns:
+        A dict of basic stats for the column, or an error dict.
+    """
+    return csv_manager.describe_column(column)
+
+
+@tool
+def plot_data(y: str, x: str | None = None, plot_type: str = "line") -> str | dict:
+    """Plot from the active CSV.
+
+    Args:
+        y: Column name to plot on the y-axis. 
+        x: Column name to plot on the x-axis. If None, use row index.
+        plot_type: "line" or "scatter". Scatter requires x and y.
+
+    Returns:
+        Generates and shows the plot. 
+        Retirms a short success message string, or an error dict/string.
+    """
+
+    return csv_manager.plot_data(y=y, x=x, plot_type=plot_type)
+
+
+@tool
+def compute_correlation(col1: str, col2: str) -> dict:
+    """
+    Compute the Pearson correlation between two columns in the loaded DataFrame.
+
+    Args:
+        col1: first column name
+        col2: second column name
+
+    Returns:
+        The correlation coefficient and p-value.
+    """
+    return csv_manager.compute_correlation(col1,col2)
+
+print('\n')
+print(compute_correlation.description)
+
+'''
+What information does smolagents need from you (the developer) in order to produce a good description?
+- Type hints must be present at both the input and output level for proper use (for example: load_csv(filename: str) -> dict)
+- Google-style docstrings (the text between the """) must be used to describe the goal, arguments, and returned objects in natural language of the tool
+'''
+
+# Q8
+
+# Tool List
+TOOLS = [
+    list_csv_files,
+    load_csv,
+    get_columns,
+    summarize_columns,
+    describe_column,
+    plot_data,
+    compute_correlation
+]
+
+# setup the model
+model_to_use = "gpt-4o-mini"  # default model ID
+model = OpenAIServerModel(
+    api_key=api_key,
+    model_id=model_to_use,
+)
+
+
+SYSTEM_PROMPT = (
+    "You are a small data assistant to help analyze files stored in resources/. "
+    "Use the available tools to do any work requested (do not guess). "
+    "Keep answers short and student-friendly."
+)
+
+tool_agent = ToolCallingAgent(tools=TOOLS,
+                         model=model,
+                         instructions=SYSTEM_PROMPT,)
+
+CODE_INSTRUCTIONS = """
+You are a helpful CSV analysis assistant.
+
+You can do two kinds of actions:
+1) Call the provided tools.
+2) Write and execute Python code when tools are not enough.
+
+Rules:
+- Prefer tools for simple tasks.
+- IMPORTANT: If the user requests plot styling (color, marker, title text, labels, grid, etc.)
+  that the plot_data tool cannot control, DO NOT call plot_data.
+  Instead, write matplotlib code directly so the plot matches the request.
+  If code execution fails, do not fall back to plot_data when the user requested styling (like color). 
+  Explain what failed and what you would need to proceed.
+- Be honest: only claim you did something if the code or tool actually did it.
+- Assume the active dataset lives in csv_manager.df after a CSV is loaded.
+"""
+
+code_agent = CodeAgent(
+    tools=TOOLS,
+    model=model,
+    instructions=CODE_INSTRUCTIONS,
+    additional_authorized_imports=["pandas", "matplotlib.pyplot", "numpy"],
+    max_steps=8,
+)
+
+prompt = "Load bike_commute.csv. Plot avg_heart_rate vs duration_min as a scatter plot with green dots."
+
+response_tool = tool_agent.run(prompt)
+response_code = code_agent.run(prompt, additional_args={"csv_manager": csv_manager})
+
+'''
+What did each agent actually produce? Did the ToolCallingAgent change the dot color? Did the CodeAgent?
+- ToolCallingAgent did not change the color but the CodeAgent did
+What does this reveal about when each type of agent is more useful?
+- ToolAgent is useful when the problem are straight forward and within the tool given but CodeAgent can go further and can  be more adaptable to the user query and explore tools outside the given to acquire the answers
+'''
+
+# Q9
+
+''''
+Describe a task where a ToolCallingAgent would be a better choice than a CodeAgent. What property of the task makes it a good fit for a tool-based approach?
+- For task that are within the constraint of the program/app is where the ToolCallingAgent is great, because it has everything it need within it reach.
+- ToolCallingAgent is great for straight up input to out like converting Celsius to Fahrenheit, give it input and it produce out, straight forward
+'''
+
+'''
+What is one meaningful risk of using a CodeAgent that does not apply to a ToolCallingAgent? (Think about what's actually happening when the agent generates and runs code.)
+- CodeAgent can modify your existing tools to add new capabilities but this is risky since the edits made by the agent may make the tool unusable. Hence, it is generally better to let the agent create its own tools if needed.
+'''

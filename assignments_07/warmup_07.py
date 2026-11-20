@@ -951,6 +951,11 @@ prompt = "Load bike_commute.csv. Plot avg_heart_rate vs duration_min as a scatte
 response_tool = tool_agent.run(prompt)
 response_code = code_agent.run(prompt, additional_args={"csv_manager": csv_manager})
 
+print('\n')
+print(response_tool)
+print('\n')
+print(response_code)
+print('\n')
 '''
 What did each agent actually produce? Did the ToolCallingAgent change the dot color? Did the CodeAgent?
 - ToolCallingAgent did not change the color but the CodeAgent did

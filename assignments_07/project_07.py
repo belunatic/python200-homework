@@ -168,22 +168,85 @@ def get_top_n_countries(column: str, year: int, n: int = 5) -> dict:
 
 # Task 2
 
-# model = OpenAIServerModel(api_key=api_key, model_id="gpt-4o-mini")
+model = OpenAIServerModel(api_key=api_key, model_id="gpt-4o-mini")
 
-# SYSTEM_PROMPT = """
-# You are a data analyst assistant for the World Happiness dataset.
-# Use the available tools for loading data, summarizing columns, computing correlations,
-# and ranking countries. Write Python code directly only when the tools are not sufficient
-# (for example, when creating custom plots or computing something the tools don't cover).
-# Be concise and student-friendly in your responses.
-# """
+SYSTEM_PROMPT = """
+You are a data analyst assistant for the World Happiness dataset.
+Use the available tools for loading data, summarizing columns, computing correlations,
+and ranking countries. Write Python code directly only when the tools are not sufficient
+(for example, when creating custom plots or computing something the tools don't cover).
+Be concise and student-friendly in your responses.
+"""
 
-# agent = CodeAgent(
-#     tools=[load_happiness_data, summarize_column, compute_correlation, get_top_n_countries],
-#     model=model,
-#     instructions=SYSTEM_PROMPT,
-#     additional_authorized_imports=["pandas", "matplotlib.pyplot", "scipy.stats"],
-#     max_steps=8,
-# )
+agent = CodeAgent(
+    tools=[load_happiness_data, summarize_column, compute_correlation, get_top_n_countries],
+    model=model,
+    instructions=SYSTEM_PROMPT,
+    additional_authorized_imports=["pandas", "matplotlib.pyplot", "scipy.stats", 'numpy'],
+    max_steps=8,
+)
 
 #task 3
+
+if __name__ == "__main__":
+    queries = [
+        "Load the happiness data and tell me its shape and column names.",
+        "Summarize the happiness_score column.",
+        "What is the correlation between gdp_per_capita and happiness_score? Is it statistically significant?",
+        "Show me the top 5 happiest countries in 2020.",
+        "Plot happiness_score over the years as a line chart, with one line per region. Save the plot to outputs/happiness_by_region.png.",
+    ]
+
+    for query in queries:
+        print(f"\n--- Query: {query} ---")
+        response = agent.run(query, reset=False)
+        print(response)
+
+    # task 4
+    # My query 1
+    my_query_1 = "Plot a scatter plot for gdp_per_capita and happiness_score?"   # replace with your question
+    response_1 = agent.run(my_query_1, reset=False)
+    print('\n')
+    print(response_1)
+    # Comment: Did this trigger tool use, code generation, or both?
+    '''
+    The trigger used a tool and generated its own code and saved the plot in outputs without telling it
+    '''
+
+    # My query 2
+    my_query_2 = "Why did the chicken cross the road?"   # replace with your question
+    response_2 = agent.run(my_query_2, reset=False)
+    print('\n')
+    print(response_2)
+    # Comment: Did this trigger tool use, code generation, or both?
+    '''
+    The trigger did  not use any tool or generate, it just answer the question.
+    '''
+
+# task 5
+
+# --- Reflection ---
+#
+# 1. In Query 3, how did the agent report the correlation? The `compute_correlation` tool
+#    returns both a Pearson r and a p-value — did the agent compute and communicate the
+#    result sensibly (for example, describing the strength and direction of the
+#    relationship, and noting how confident we can be in it)?
+
+'''
+The query did return the both a Pearson r and a p-value but also retunr signifcant as a dict with True value. It did not explain anything
+'''
+#
+# 2. Did any of the agent's responses surprise you — either by being more capable than
+#    you expected, or less? Describe one specific example.
+'''
+One thing that surprise me was when I ask it to plot something, it did not do a great job on the plot but it saved the plot to a specific file that were other plot resides without me stating it.
+'''
+#
+# 3. What one additional tool would make this agent meaningfully more useful?
+#    Describe what it would do and what kind of question it would help the agent answer.
+#    (You do not need to implement it.)
+'''
+Other tool that will help will have to be a plotting tool that can plot for the LLM, so LLM does not need to do so many revision to get it correct. 
+
+It will load up the all necessary imports, scattered depending on plot style and so on
+'''

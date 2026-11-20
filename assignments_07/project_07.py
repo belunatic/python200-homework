@@ -21,7 +21,7 @@ else:
 api_key = os.getenv("OPENAI_API_KEY")
 
 # resource folder
-RESOURCES_DIR = Path("resources")
+# RESOURCES_DIR = Path("resources")
 
 # global dataframe 
 df = None
@@ -45,6 +45,8 @@ def load_happiness_data() -> dict:
         "GDP per capita": "gdp_per_capita",
     }
 
+    global df
+
     frames = []
     for path in sorted(DATA_DIR.glob("world_happiness_*.csv")):
         year_df = pd.read_csv(path, sep=";", decimal=",")
@@ -62,13 +64,14 @@ def load_happiness_data() -> dict:
 
 @tool
 def summarize_column(column: str) -> dict:
-    """Return descriptive statistics for a single column in the loaded dataset.
+    """
+    Return descriptive statistics for a column in the loaded dataset.
 
-        Args: Column name
+    Args:
+        column: The name of the column to summarize.
 
-        Return:
-            A dictionary of the column described
-    ...
+    Returns:
+        A dictionary containing descriptive statistics for the column.
     """
 
     if df is None:
@@ -161,3 +164,26 @@ def get_top_n_countries(column: str, year: int, n: int = 5) -> dict:
 
     except Exception as e:
         return {"error": str(e)}
+
+
+# Task 2
+
+# model = OpenAIServerModel(api_key=api_key, model_id="gpt-4o-mini")
+
+# SYSTEM_PROMPT = """
+# You are a data analyst assistant for the World Happiness dataset.
+# Use the available tools for loading data, summarizing columns, computing correlations,
+# and ranking countries. Write Python code directly only when the tools are not sufficient
+# (for example, when creating custom plots or computing something the tools don't cover).
+# Be concise and student-friendly in your responses.
+# """
+
+# agent = CodeAgent(
+#     tools=[load_happiness_data, summarize_column, compute_correlation, get_top_n_countries],
+#     model=model,
+#     instructions=SYSTEM_PROMPT,
+#     additional_authorized_imports=["pandas", "matplotlib.pyplot", "scipy.stats"],
+#     max_steps=8,
+# )
+
+#task 3

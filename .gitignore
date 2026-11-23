@@ -8,3 +8,5 @@ CACHEDIR.TAG
 .venv/
 
 .env
+
+cdt_copilot_code_sample

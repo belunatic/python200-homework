@@ -78,10 +78,10 @@ A data pipeline that processes 10 files per run now needs to process 10,000 file
 
 ### Taxonomy
 
-- You need to store 10 TB of image files and retrieve them by filename from any machine. -> Object Storage -> EC2
+- You need to store 10 TB of image files and retrieve them by filename from any machine. -> Object Storage -> S3
 - You need to run an ML training job on a GPU for four hours, then shut it down. -> ML Platform -> Azure OpenAI
-- You need to host a web API that automatically scales up when traffic spikes and scales down when it quiets. -> Data warehouse -> Redshift
-- You need to send structured data to a large language model and get a text response back. -> LLM API -> Vertex AI
+- You need to host a web API that automatically scales up when traffic spikes and scales down when it quiets. -> Serverless compute -> Lambda
+- You need to send structured data to a large language model and get a text response back. -> Managed relational DB -> RDS
 
 <!-- Q4 -->
 

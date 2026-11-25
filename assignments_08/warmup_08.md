@@ -79,9 +79,9 @@ A data pipeline that processes 10 files per run now needs to process 10,000 file
 ### Taxonomy
 
 - You need to store 10 TB of image files and retrieve them by filename from any machine. -> Object Storage -> S3
-- You need to run an ML training job on a GPU for four hours, then shut it down. -> ML Platform -> Azure OpenAI
+- You need to run an ML training job on a GPU for four hours, then shut it down. -> ML Platform -> SageMaker
 - You need to host a web API that automatically scales up when traffic spikes and scales down when it quiets. -> Serverless compute -> Lambda
-- You need to send structured data to a large language model and get a text response back. -> Managed relational DB -> RDS
+- You need to send structured data to a large language model and get a text response back. -> LLM API -> Bedrock
 
 <!-- Q4 -->
 

@@ -17,3 +17,7 @@ Supabase is setup and the tables have been confirmed
 ## what does the cost difference tell you about when a GPU instance is or isn't worth it?
 
 - The more GPU you use the higher the cost; Therefore, before starting a project asking " Does this workload need a GPU? " then moving from GPU instance to general-purpose insatnce can save thousands of dollars per month.
+
+## The recording
+
+- [The video](https://youtu.be/xUs-lq85VOo)
